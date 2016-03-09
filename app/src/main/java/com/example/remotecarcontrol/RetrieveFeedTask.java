@@ -13,6 +13,7 @@ class RetrieveFeedTask extends Thread{
         try {
             System.out.println("vse norm!!!!");
             Socket socket = new Socket("172.16.99.101", 4848);
+            System.out.println("vse super!!!!");
             if(socket==null||socket.isClosed()){
                 System.out.println("nenanfuiwe!!!!!!!");
                 return;
