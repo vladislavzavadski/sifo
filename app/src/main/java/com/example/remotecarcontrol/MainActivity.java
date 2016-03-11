@@ -10,8 +10,8 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import java.net.Socket;
 
@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private SensorEventListener sensorEventListener;
     private Socket socket;
+    private RadioButton radioButtonForward;
+    private RadioButton radioButtonBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
         wifiConnect("infolan25645", "32325645");
         sensorManager = (SensorManager)this.getSystemService(Context.SENSOR_SERVICE);
         final Button button = (Button)findViewById(R.id.button);
+        radioButtonForward = (RadioButton)findViewById(R.id.radioButtonForward);
+        radioButtonBack  = (RadioButton)findViewById(R.id.radioButtonBack);
+        radioButtonForward.setChecked(true);
+        radioButtonBack.setChecked(false);
       /*  button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,10 +114,14 @@ public class MainActivity extends AppCompatActivity {
             tv.setText(xAxis+"\n"+yAxis+"\n"+zAxis+"\n speed:" +speed);
             RetrieveFeedTask retrieveFeedTask = RetrieveFeedTask.getInstance();
             byte[] array = new byte[5];
-            for (int i = 1; i < array.length; i++) {
+            for (int i = 0; i < array.length; i++) {
                    array[i] = 0;
             }
-            array[0] = speed;
+            if(radioButtonForward.isChecked())
+                array[0] = speed;
+            else if(radioButtonBack.isChecked()){
+                array[1] = speed;
+            }
             retrieveFeedTask.send(array);
         }
         else{
