@@ -14,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        wifiConnect("infolan25645", "32325645");
+        wifiConnect("BMW M3 COUPE1", "18271827");
         sensorManager = (SensorManager)this.getSystemService(Context.SENSOR_SERVICE);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         aSwitch = (Switch)findViewById(R.id.switch1);
@@ -125,25 +124,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveCar(){
-        byte[] array = new byte[5];
+        byte[] array = new byte[8];
         int progress = seekBar.getProgress();
         if(radioButtonForward.isChecked()){
             array[0] = convertIntoSpeed(progress);
-            array[1] = 0;
+            String str = Integer.toBinaryString(array[0]);
+            for(int i=0; i<str.length(); i++){
+                if(str.charAt(i)=='1'){
+                    array[i] = 127;
+                }
+                else if(str.charAt(i)=='0'){
+                    array[i] = 0;
+                }
+            }
+           // array[1] = 0;
         }
         else if(radioButtonBack.isChecked()){
-            array[0] = 0;
-            array[1] = convertIntoSpeed(progress);
+           // array[0] = 0;
+            //array[1] = convertIntoSpeed(progress);
         }
         if(prevValue[1]>0){
-            array[2] = convertAngleToByte((int) prevValue[1]);
-            array[3] = 0;
+            //array[2] = convertAngleToByte((int) prevValue[1]);
+            //array[3] = 0;
         }
         if(prevValue[1]<0){
-            array[2] = 0;
-            array[3] = convertAngleToByte((int) prevValue[1]);
+            //array[2] = 0;
+            //array[3] = convertAngleToByte((int) prevValue[1]);
         }
-        array[4] = (byte) (aSwitch.isChecked()?127:0);//сделать проверку на то включался свет или нет.
+        //array[4] = (byte) (aSwitch.isChecked()?127:0);//сделать проверку на то включался свет или нет.
 
         RetrieveFeedTask.getInstance().send(array);
     }

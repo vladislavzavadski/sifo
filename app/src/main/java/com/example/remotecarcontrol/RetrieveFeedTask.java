@@ -20,7 +20,7 @@ class RetrieveFeedTask extends Thread{
     public void run(){
         try {
             System.out.println("vse norm!!!!");
-            Socket socket = new Socket("172.16.99.101", 4848);
+            Socket socket = new Socket("192.168.4.1", 12337);
             System.out.println("vse super!!!!");
             if(socket==null||socket.isClosed()){
                 System.out.println("nenanfuiwe!!!!!!!");
@@ -32,9 +32,11 @@ class RetrieveFeedTask extends Thread{
             outputStream.close();
             socket.close();
             System.out.println("vse norm!!!!");
-            System.out.println("sended " + paramsToSend[0]+" "+paramsToSend[1]+" "+paramsToSend[2]+" "+paramsToSend[3]+" "+paramsToSend[4]+" ");
-            socket = null;
-        } catch (IOException e) {
+            for(byte i:paramsToSend) {
+                System.out.print(i + " ");
+            }
+            System.out.println();
+             } catch (IOException e) {
             e.printStackTrace();
         }
 
