@@ -131,16 +131,19 @@ public class MainActivity extends AppCompatActivity {
         int progress = seekBar.getProgress();
         if(radioButtonForward.isChecked()){
             String str = Integer.toBinaryString(convertIntoSpeed(progress));
+            while (str.length()<8){
+                str = "0"+str;
+            }
             System.out.println("");
             System.out.println("1original: " + str);
             System.out.println("2str.length: " + str.length());
-            array[0] = 0;
+            //array[0] = 0;
             for(int i=0; i<str.length(); i++){
                 if(str.charAt(i) == '1'){
-                    array[i+1] = 127;
+                    array[i] = 127;
                 }
                 else if(str.charAt(i) == '0'){
-                    array[i+1] = 0;
+                    array[i] = 0;
                 }
             }
             // array[1] = 0;
