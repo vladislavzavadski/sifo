@@ -6,6 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton radioButtonForward;
     private RadioButton radioButtonBack;
     private SeekBar seekBar;
+    private boolean flag = false;
     private Switch aSwitch;
     private final float[] prevValue = new float[3];
     @Override
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        wifiConnect("BMW M3 COUPE1", "18271827");
+        wifiConnect("infolan25645", "32325645");
         sensorManager = (SensorManager)this.getSystemService(Context.SENSOR_SERVICE);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         aSwitch = (Switch)findViewById(R.id.switch1);
@@ -127,20 +130,23 @@ public class MainActivity extends AppCompatActivity {
         byte[] array = new byte[8];
         int progress = seekBar.getProgress();
         if(radioButtonForward.isChecked()){
-            array[0] = convertIntoSpeed(progress);
-            String str = Integer.toBinaryString(array[0]);
+            String str = Integer.toBinaryString(convertIntoSpeed(progress));
+            System.out.println("");
+            System.out.println("1original: " + str);
+            System.out.println("2str.length: " + str.length());
+            array[0] = 0;
             for(int i=0; i<str.length(); i++){
-                if(str.charAt(i)=='1'){
-                    array[i] = 127;
+                if(str.charAt(i) == '1'){
+                    array[i+1] = 127;
                 }
-                else if(str.charAt(i)=='0'){
-                    array[i] = 0;
+                else if(str.charAt(i) == '0'){
+                    array[i+1] = 0;
                 }
             }
-           // array[1] = 0;
+            // array[1] = 0;
         }
         else if(radioButtonBack.isChecked()){
-           // array[0] = 0;
+            // array[0] = 0;
             //array[1] = convertIntoSpeed(progress);
         }
         if(prevValue[1]>0){
@@ -153,7 +159,11 @@ public class MainActivity extends AppCompatActivity {
         }
         //array[4] = (byte) (aSwitch.isChecked()?127:0);//сделать проверку на то включался свет или нет.
 
-        RetrieveFeedTask.getInstance().send(array);
+        if (flag) {
+            RetrieveFeedTask.getInstance().send(array);
+        }
+        flag = true;
+
     }
 
 }
