@@ -6,8 +6,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,18 +24,20 @@ public class MainActivity extends AppCompatActivity {
     private boolean flag = false;
     private Switch aSwitch;
     private final float[] prevValue = new float[3];
+    private int seekBarProgress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        wifiConnect("infolan25645", "32325645");
+        //wifiConnect("infolan25645", "32325645");
         sensorManager = (SensorManager)this.getSystemService(Context.SENSOR_SERVICE);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         aSwitch = (Switch)findViewById(R.id.switch1);
         prevValue[0] = 0;
         prevValue[1] = 0;
         prevValue[2] = 0;
+        seekBarProgress = -1;
         final boolean[] driveEnable = {false};
         radioButtonForward = (RadioButton)findViewById(R.id.radioButtonForward);
         radioButtonBack  = (RadioButton)findViewById(R.id.radioButtonBack);
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                seekBarProgress = seekBar.getProgress();
                 moveCar();
             }
 
@@ -128,9 +129,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveCar(){
         byte[] array = new byte[8];
-        int progress = seekBar.getProgress();
+
+        if(seekBarProgress == -1){
+            return;
+        }
         if(radioButtonForward.isChecked()){
-            String str = Integer.toBinaryString(convertIntoSpeed(progress));
+            String str = Integer.toBinaryString(convertIntoSpeed(seekBarProgress));
             while (str.length()<8){
                 str = "0"+str;
             }

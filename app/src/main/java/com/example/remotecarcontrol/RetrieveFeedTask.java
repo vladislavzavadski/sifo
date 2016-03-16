@@ -16,7 +16,7 @@ class RetrieveFeedTask extends Thread{
           @Override
         public void run(){
               try {
-                  socket = new Socket("172.16.99.101", 4848);
+                  socket = new Socket("172.16.99.100", 4848);
               } catch (IOException e) {
                   e.printStackTrace();
               }
